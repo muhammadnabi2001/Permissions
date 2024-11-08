@@ -52,5 +52,5 @@ Route::get('deleterole/{id}',[RoleController::class,'destroy'])->name('deleterol
 Route::get('isactive/{id}',[RoleController::class,'isactive'])->name('isactive');
 Route::get('noactive/{id}',[RoleController::class,'noactive'])->name('noactive');
 
-Route::get('permission',[PermissionController::class,'permission'])->name('permission');
+Route::get('permission',[PermissionController::class,'permission'])->name('permission')->middleware(Check::class);
 

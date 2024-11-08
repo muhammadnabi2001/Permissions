@@ -35,7 +35,8 @@ class Check
             if (Permission::where("key", $routeName)->first()) {
 
                 if ($user->hasPermission($routeName)) {
-                    return $next($request);
+                    return $next($request);         
+                   
                 } else {
                     abort(403);
                 }
