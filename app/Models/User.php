@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    /**
+     * @method bool hasPermission(string $permissionKey)
+     */
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -38,6 +42,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
     protected function casts(): array
     {
         return [
@@ -52,5 +57,11 @@ class User extends Authenticatable
     public function roless()
     {
         return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
+    }
+    public function hasPermission($permission)
+    {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('key', $permission);
+        })->exists();
     }
 }

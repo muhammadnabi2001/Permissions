@@ -18,29 +18,29 @@ class Check
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         //dd(Auth::user()->role);
-    //     $userRoles=Auth::user()->roles;
-    //    //dd(Auth::user()->roles);
-    //     if(Auth::check() && $userRoles->whereIn('name',$roles)->first())
-    //     {
-    //         //dd(123);
-    //         return $next($request);
-    //     }
-    //     abort(403);
+        //     $userRoles=Auth::user()->roles;
+        //    //dd(Auth::user()->roles);
+        //     if(Auth::check() && $userRoles->whereIn('name',$roles)->first())
+        //     {
+        //         //dd(123);
+        //         return $next($request);
+        //     }
+        //     abort(403);
 
-        $routname=$request->route()->getName();
-        if(Auth::user()){
-            if(Permission::where("key",$routname)->first())
-            {
-                $role=Auth::user()->roles->first();
-                if($role->permissions()->where("key",$routname)->exists())
-                {
-                    //dd(123);
+        $routeName = $request->route()->getName();
+
+        if (Auth::user()) {
+            $user = Auth::user();
+
+            if (Permission::where("key", $routeName)->first()) {
+
+                if ($user->hasPermission($routeName)) {
                     return $next($request);
-                }else{
+                } else {
                     abort(403);
                 }
             }
-        }else{
+        } else {
             abort(403);
         }
     }
